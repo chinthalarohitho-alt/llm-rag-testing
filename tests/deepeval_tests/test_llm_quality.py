@@ -24,7 +24,7 @@ def test_answer_is_relevant():
 
 
 def test_answer_is_correct():
-    """G-Eval: write your own grading rule in plain English."""
+    """G-Eval: write your own grading steps in plain English."""
     question = "How many continents are there on Earth? Answer in one sentence."
     test_case = LLMTestCase(
         input=question,
@@ -33,7 +33,13 @@ def test_answer_is_correct():
     )
     correctness = GEval(
         name="Correctness",
-        criteria="Check whether the actual output states the same fact as the expected output.",
+        # Explicit steps keep small judges consistent (they don't invent their own).
+        evaluation_steps=[
+            "Identify the key fact in the expected output.",
+            "Check whether the actual output states the same key fact.",
+            "Extra details that are also correct must NOT lower the score.",
+            "Give a high score if the key fact matches, a low score if it is missing or wrong.",
+        ],
         evaluation_params=[
             SingleTurnParams.ACTUAL_OUTPUT,
             SingleTurnParams.EXPECTED_OUTPUT,

@@ -23,9 +23,12 @@ test-offline:    ## Fast tests, no model needed
 test-deepeval:   ## DeepEval: quality, RAG and safety tests
 	.venv/bin/deepeval test run tests/deepeval_tests
 
-# v1 is the "before" prompt and is EXPECTED to fail 2 of 10 checks, so we pass at 80%.
-promptfoo:       ## Promptfoo: compare prompt v1 vs v2
-	PROMPTFOO_PASS_RATE_THRESHOLD=80 $(PROMPTFOO) eval -c promptfoo/promptfooconfig.yaml
+# Step 1 compares v1 vs v2. v1 is the "before" prompt and is EXPECTED to fail
+# some checks, so the leading "-" tells make to keep going.
+# Step 2 is the real gate: the v2 prompt must pass every check (re-uses cached answers).
+promptfoo:       ## Promptfoo: compare prompt v1 vs v2, then require v2 to pass
+	-$(PROMPTFOO) eval -c promptfoo/promptfooconfig.yaml
+	$(PROMPTFOO) eval -c promptfoo/promptfooconfig.yaml --filter-prompts support_v2
 
 promptfoo-rag:   ## Promptfoo: end-to-end test of the RAG app
 	PROMPTFOO_PYTHON=$(PY) $(PROMPTFOO) eval -c promptfoo/rag_eval.yaml

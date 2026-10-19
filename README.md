@@ -119,7 +119,7 @@ These are real issues the suite caught while I built it, which is the whole poin
 |---|---|---|
 | Offline tests | ✅ 8/8 | < 1 s |
 | DeepEval (quality, RAG, safety) | ✅ 13/13 | ~7 min |
-| Promptfoo prompt comparison | v1 ❌ 3/5 → v2 ✅ 5/5 | ~40 s |
+| Promptfoo prompt comparison | v1 ❌ fails 2–3 of 5 → v2 ✅ 5/5 | ~40 s |
 | Promptfoo RAG end-to-end | ✅ 5/5 | ~25 s |
 
 <sub>*Apple Silicon Mac, 16 GB RAM, gemma3:4b on Ollama. LLM-judged tests can vary slightly between runs.</sub>
