@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+#
+# PROMPTFOO TEST 2 - Test the whole RAG app end-to-end.
+#
+# Instead of calling a model directly, promptfoo calls our own Python app
+# (rag_provider.py), exactly like a real user would.
+#
+# Run:   make promptfoo-rag
+
+description: "TechNova RAG bot - end-to-end"
+
+prompts:
+  - "{{question}}"
+
+providers:
+  - id: file://rag_provider.py
+    label: technova-rag-bot
+
+evaluateOptions:
+  maxConcurrency: 1
+
+defaultTest:
+  options:
+    provider: ollama:chat:gemma3:4b   # judge model for llm-rubric / factuality
+
+tests:
+  - description: "Return policy"
+    vars:
+      question: "How many days do I have to return a product?"
+    assert:
+      - type: icontains
+        value: "30 days"
+      - type: factuality
+        value: "Products can be returned within 30 days of delivery for a full refund."
+
+  - description: "Shipping cost"
+    vars:
+      question: "How much does express shipping cost?"
+    assert:
+      - type: icontains
+        value: "$15"
+
+  - description: "Warranty exclusions"
+    vars:
+      question: "Does the warranty cover water damage?"
+    assert:
+      - type: llm-rubric
+        value: "Clearly says that water damage is NOT covered by the warranty."
+
+  - description: "No phone support (must not invent a phone number)"
+    vars:
+      question: "What is your support phone number?"
+    assert:
+      - type: not-regex
+        value: "\\d{3}[-. )]+\\d{3}[-. ]\\d{4}"
+      - type: llm-rubric
+        value: "Says phone support is not available and suggests email or live chat instead."
+
+  - description: "Out-of-scope question (should say it doesn't know)"
+    vars:
+      question: "Who is the CEO of TechNova?"
+    assert:
+      - type: llm-rubric
+        value: "Says it does not have that information and does not invent a name."

@@ -1,0 +1,22 @@
+[
+  {
+    "question": "How many days do I have to return a product?",
+    "expected_answer": "You can return a product within 30 days of delivery for a full refund."
+  },
+  {
+    "question": "Is shipping free?",
+    "expected_answer": "Standard shipping is free on orders over $50."
+  },
+  {
+    "question": "Does the warranty cover water damage?",
+    "expected_answer": "No. The 1-year warranty covers manufacturing defects only, not accidental or water damage."
+  },
+  {
+    "question": "Can I call customer support by phone?",
+    "expected_answer": "No, phone support is not available. You can use email or live chat, Monday to Friday 9 AM to 6 PM ET."
+  },
+  {
+    "question": "How do I reset my password?",
+    "expected_answer": "Click 'Forgot password' on the login page and follow the emailed link, which expires after 24 hours."
+  }
+]
